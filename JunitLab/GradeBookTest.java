@@ -9,6 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Gradebook Test
+ * @author Lap Wu
+ * @version 9/6
+ */
 public class GradeBookTest {
 private GradeBook GB1, GB2,GB3;
 
