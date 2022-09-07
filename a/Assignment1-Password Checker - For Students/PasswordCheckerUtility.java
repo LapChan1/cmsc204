@@ -32,20 +32,28 @@ public class PasswordCheckerUtility {
 	 * @param user inputed password
 	 * @return
 	 */
-	public static boolean isValidLength(String pass) {
-		if( pass.length()<6)
-			return false;
-		else if(5>pass.length() && pass.length()<10)
-			return "weak";
-		else 
+	public static boolean isValidLength(String pass) throws LengthException,WeakPasswordException{
+		try {
+			if( pass.length()<6)
+				throw new LengthException();
+			else if(5>pass.length() && pass.length()<10)
+				throw new WeakPasswordException();
 			return true;
+		}
+		catch (LengthException s){
+			return false;
+		}
+		catch (WeakPasswordException s2){
+			return false;
+		}
+		
 	}
 	/**
 	 * check if password contain digit
 	 * @param user input password
 	 * @return
 	 */
-	public static boolean hasDigit(String pass) {
+	public static boolean hasDigit(String pass) throws NoDigitException{
 		pattern=Pattern.compile("[1-9]+");
 		matcher= pattern.matcher(pass);
 		return(!matcher.matches());
@@ -103,14 +111,9 @@ public class PasswordCheckerUtility {
 	 * @return if the two passwords is the same 
 	 */
 	public static boolean comparePasswordBool(String pass, String passConf) {
-		
-	}
-	/**
-	 * check if the two password is the same
-	 * @param both are user inputed passwords 
-	 */
-	public static void comparePassword(String pass, String passConf) {
-		
+		if(pass.equals(passConf))
+			return true;
+		return false;
 	}
 	
 }
