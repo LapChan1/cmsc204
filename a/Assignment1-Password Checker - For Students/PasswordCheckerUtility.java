@@ -33,7 +33,12 @@ public class PasswordCheckerUtility {
 	 * @return
 	 */
 	public static boolean isValidLength(String pass) {
-		
+		if( pass.length()<6)
+			return false;
+		else if(5>pass.length() && pass.length()<10)
+			return "weak";
+		else 
+			return true;
 	}
 	/**
 	 * check if password contain digit
@@ -88,7 +93,9 @@ public class PasswordCheckerUtility {
 	 * @return
 	 */
 	public static boolean hasSpecialChar(String pass) {
-		
+		pattern=Pattern.compile("[~!@#$%^&*()_+{}\\[\\]:;,.<>/?-]+");
+		matcher= pattern.matcher(pass);
+		return(!matcher.matches());
 	}
 	
 	/**
