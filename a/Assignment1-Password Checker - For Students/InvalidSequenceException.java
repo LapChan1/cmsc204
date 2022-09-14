@@ -1,4 +1,4 @@
-package a1;
+package application;
 
 public class InvalidSequenceException extends Exception{
 	public InvalidSequenceException() {

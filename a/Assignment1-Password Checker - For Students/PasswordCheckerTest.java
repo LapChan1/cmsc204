@@ -1,10 +1,12 @@
-
+package application;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Before;
@@ -95,25 +97,24 @@ public class PasswordCheckerTest {
 			assertTrue("Successfully threw a NoLowerAlphaExcepetion",true);
 		}
 		catch(Exception e)
-		{
+		{	System.out.println(e.getMessage());
 			assertTrue("Threw some other exception besides NoLowerAlphaException",false);
 		}
 	}
 	/**
 	 * Test if the password is weak
-	 * This test should throw a InvalidSequenceException for second case
+	 * This test should throw a WeakPasswordException for second case
 	 */
 	@Test
 	public void testIsWeakPassword()
 	{
 		try{
-			 
 			boolean weakPwd = PasswordCheckerUtility.isWeakPassword("1234@aA");
 			assertTrue("Did not throw WeakPassword Exception",false);
 		}
 		catch(WeakPasswordException e)
 		{
-			assertTrue("Successfully threw a NoLowerAlphaExcepetion",true);
+			assertTrue("Successfully threw a WeakPasswordException",true);
 		}
 		catch(Exception e)
 		{
@@ -154,59 +155,170 @@ public class PasswordCheckerTest {
 		ArrayList<String> results;
 		results = PasswordCheckerUtility.getInvalidPasswords(passwords);
 		
-		Scanner scan = new Scanner(results.get(0)); 
-		assertEquals(scan.next(), "334455BB#");
-		String nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("lowercase"));
+		String scan = results.get(0); 
+		assertEquals(scan, "334455BB#");
+		String nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasLowerAlp(nextResults);
+			assertTrue("Did not throw NoLowerAlphaException",true);
+		}
+		catch (NoLowerAlphaException e){
+			assertTrue("Successfully threw a NoLowerAlphaException",false);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoLowerAlphaException",false);
+		}
+		//assertTrue(nextResults.contains("lowercase"));
 		
-		scan = new Scanner(results.get(1));  
-		assertEquals(scan.next(), "george2ZZZ#");
-		nextResults = scan.nextLine().toLowerCase(); 
-		assertTrue(nextResults.contains("sequence"));
+		scan = results.get(1);  
+		assertEquals(scan, "george2ZZZ#");
+		nextResults = scan.toLowerCase(); 
+		try {
+			PasswordCheckerUtility.noSameCharSequence(nextResults);
+			assertTrue("Did not throw InvalidSequenceException",false);
+			
+		}
+		catch (InvalidSequenceException e){
+			assertTrue("Successfully threw a InvalidSequenceException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides InvalidSequenceException",false);
+		}
+		//assertTrue(nextResults.contains("sequence"));
 		
 		 
-		scan = new Scanner(results.get(2));  
-		assertEquals(scan.next(), "4Sal#");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("long"));
+		scan = (results.get(2));  
+		assertEquals(scan, "4Sal#");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.isValidLength(nextResults);
+			assertTrue("Did not throw LengthException",false);
+		}
+		catch (LengthException e){
+			assertTrue("Successfully threw a LengthException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides LengthException",false);
+		}
+		//assertTrue(nextResults.contains("long"));
 		
-				scan = new Scanner(results.get(3));  
-		assertEquals(scan.next(), "bertha22");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("uppercase"));
+		scan = (results.get(3));  
+		assertEquals(scan, "bertha22");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasUpperAlpha(nextResults);
+			assertTrue("Did not throw NoUpperAlphaException",false);
+		}
+		catch (NoUpperAlphaException e){
+			assertTrue("Successfully threw a NoUpperAlphaException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoUpperAlphaException",false);
+		}
+		//assertTrue(nextResults.contains("uppercase"));
 		
-		scan = new Scanner(results.get(4));  
-		assertEquals(scan.next(), "august30");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("uppercase") );
+		scan = (results.get(4));  
+		assertEquals(scan, "august30");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasUpperAlpha(nextResults);
+			assertTrue("Did not throw NoUpperAlphaException",false);
+		}
+		catch (NoUpperAlphaException e){
+			assertTrue("Successfully threw a NoUpperAlphaException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoUpperAlphaException",false);
+		}
+//		assertTrue(nextResults.contains("uppercase") );
 		
 		 
 		
-		scan = new Scanner(results.get(5));  
-		assertEquals(scan.next(), "a2cDe");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("long") );
+		scan = (results.get(5));  
+		assertEquals(scan, "a2cDe");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.isValidLength(nextResults);
+			assertTrue("Did not throw LengthException",false);
+		}
+		catch (LengthException e){
+			assertTrue("Successfully threw a LengthException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides LengthException",false);
+		}
+//		assertTrue(nextResults.contains("long") );
 		
-		scan = new Scanner(results.get(6));  
-		assertEquals(scan.next(), "ApplesxxxYYzz#");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("digit") );
+		scan = (results.get(6));  
+		assertEquals(scan, "ApplesxxxYYzz#");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasDigit(nextResults);
+			assertTrue("Did not throw NoDigitException",false);
+		}
+		catch (NoDigitException e){
+			assertTrue("Successfully threw a NoDigitException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoUpperAlphaException",false);
+		}
+//		assertTrue(nextResults.contains("digit") );
 		
-		scan = new Scanner(results.get(7));  
-		assertEquals(scan.next(), "aa11Bb");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("special") );
+		scan = (results.get(7));  
+		assertEquals(scan, "aa11Bb");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasSpecialChar(nextResults);
+			assertTrue("Did not throw NoSpecialCharacterException",false);
+		}
+		catch (NoSpecialCharacterException e){
+			assertTrue("Successfully threw a NoSpecialCharacterException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoSpecialCharacterException",false);
+		}
+//		assertTrue(nextResults.contains("special") );
 		
 		
-		scan = new Scanner(results.get(8)); 
-		assertEquals(scan.next(), "pilotProject");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("digit") );
+		scan = (results.get(8)); 
+		assertEquals(scan, "pilotProject");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.hasDigit(nextResults);
+			assertTrue("Did not throw NoDigitException",false);
+		}
+		catch (NoDigitException e){
+			assertTrue("Successfully threw a NoDigitException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides NoDigitException",false);
+		}
+//		assertTrue(nextResults.contains("digit") );
 		
-		scan = new Scanner(results.get(9));  
-		assertEquals(scan.next(), "AAAbb@123");
-		nextResults = scan.nextLine().toLowerCase();
-		assertTrue(nextResults.contains("sequence") );
+		scan = (results.get(9));  
+		assertEquals(scan, "AAAbb@123");
+		nextResults = scan.toLowerCase();
+		try {
+			PasswordCheckerUtility.noSameCharSequence(nextResults);
+			assertTrue("Did not throw InvalidSequenceException",false);
+		}
+		catch (InvalidSequenceException e){
+			assertTrue("Successfully threw a InvalidSequenceException",true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Threw some other exception besides InvalidSequenceException",false);
+		}
+//		assertTrue(nextResults.contains("sequence") );
  
 	}
 }

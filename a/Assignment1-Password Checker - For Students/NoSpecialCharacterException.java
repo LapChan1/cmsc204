@@ -1,4 +1,4 @@
-package a1;
+package application;
 
 public class NoSpecialCharacterException extends Exception{
 	public NoSpecialCharacterException() {
