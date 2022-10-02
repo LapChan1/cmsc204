@@ -15,6 +15,7 @@ public class MyStackTest {
 	// STUDENT: student tests will use the doubleS
 	public MyStack<Double> doubleS;
 	// STUDENT: add variables as needed for your student tests
+	public double d1=-2.2, d2=109.5, d3=549.0, d4=17.2, d5=3.3, d6=-5.0;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -23,6 +24,11 @@ public class MyStackTest {
 		stringS.push(b);
 		stringS.push(c);
 		//STUDENT: add setup for doubleS for student tests
+		
+		doubleS = new MyStack<Double>(5);
+		doubleS.push(d1);
+		doubleS.push(d2);
+		doubleS.push(d3);
 	}
 
 	@After
@@ -68,8 +74,20 @@ public class MyStackTest {
 
 	@Test
 	public void testPopStudent() {
-		//Use the doubleQ for student tests
-		fail("Not yet implemented");
+		try {
+			assertTrue(d3==doubleS.pop());
+			assertTrue(d2==doubleS.pop());
+			assertTrue(d1==doubleS.pop());
+			//Queue is empty, next statement should cause QueueUnderFlowException
+			doubleS.pop();
+			assertTrue("This should have caused an StackUnderflowException", false);
+		}
+		catch (StackUnderflowException e){
+			assertTrue("This should have caused an StackUnderflowException", true);
+		}
+		catch (Exception e){
+			assertTrue("This should have caused an StackUnderflowException", false);
+		}
 	}
 	
 	@Test
@@ -114,8 +132,36 @@ public class MyStackTest {
 
 	@Test
 	public void testPushStudent() {
-		//Use the doubleQ for student tests
-		fail("Not yet implemented");
+		try {
+			assertEquals(3, doubleS.size());
+			assertEquals(true, doubleS.push(d4));
+			assertEquals(4, doubleS.size());
+			assertEquals(true, doubleS.push(d5));
+			assertEquals(5, doubleS.size());
+			//Queue is full, next statement should cause QueueOverFlowException
+			doubleS.push(d6);
+			assertTrue("This should have caused an StackOverflowException", false);
+		}
+		catch (StackOverflowException e){
+			assertTrue("This should have caused an StackOverflowException", true);
+		}
+		catch (Exception e){
+			assertTrue("This should have caused an StackOverflowException", false);
+		}
+		
+		try {
+			assertEquals(3, stringS.size());
+			assertEquals(true, stringS.push("("));
+			assertEquals(4, stringS.size());
+			//System.out.println(stringS.toString(" "));
+			assertTrue("This shouldn't have caused an StackOverflowException", true);
+		}
+		catch (StackOverflowException e){
+			assertTrue("This should have caused an StackOverflowException", false);
+		}
+		catch (Exception e){
+			assertTrue("This should have caused an StackOverflowException", false);
+		}
 	}
 	
 	@Test
@@ -128,9 +174,12 @@ public class MyStackTest {
 	}
 
 	@Test
-	public void testToStringStudent() {
-		//Use the doubleQ for student tests
-		fail("Not yet implemented");
+	public void testToStringStudent() throws StackOverflowException {
+		assertEquals("-2.2 109.5 549.0", doubleS.toString(" "));
+		doubleS.push(d4);
+		assertEquals("-2.2 109.5 549.0 17.2", doubleS.toString(" "));
+		doubleS.push(d5);
+		assertEquals("-2.2 109.5 549.0 17.2 3.3", doubleS.toString(" "));
 	}
 	
 	@Test

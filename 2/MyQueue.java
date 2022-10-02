@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class MyQueue<T> implements QueueInterface<T>{
 	Node<T> head, tail;
-	int capacity=10; //maximum number of node 
+	int capacity=15; //maximum number of node 
 	int size=0;		//current number of things in stack
 	
 	/**
@@ -94,7 +94,8 @@ public class MyQueue<T> implements QueueInterface<T>{
 			s= s+delimiter+current.data.toString();
 			current=current.next;
 		}
-		s=s.substring(1, s.length()); //remove first character in the string, which should be a delimiter
+		if(s.length()>=2 )
+			s=s.substring(1, s.length()); //remove first character in the string, which should be a delimiter
 		return s;
 	}
 

@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 /**
  * 
  * @author Lap Wu
- * @version
- * @param <T> String or characters
+ * @version 10/2
+ * @param <T> String  
  */
 public class Notation {
 	
@@ -26,29 +26,36 @@ public class Notation {
 	public static String convertInfixToPostfix(String infix) throws StackUnderflowException, QueueOverflowException, StackOverflowException, InvalidNotationFormatException {
 		Q= new MyQueue<String>();
 		Stack=new MyStack<String>();
-		String c;
+		String c="";
 		for (int n=0;n<infix.length();n++) {
 			c="";
 			c+=infix.charAt(n);
-			if(c==" ")
+			if(c.equals(" "))
 				continue;
 			else if(Character.isDigit(infix.charAt(n)))
 				Q.enqueue(c);
-			else if(c=="(")
+			else if(c.equals("(")) {
 				Stack.push(c);
-			else if(c=="/"||c=="+"||c=="-"||c=="*") {
-				if (c==c)//TODO
-					Q.enqueue(Stack.pop());
+				}
+			else if(c.equals("/")||c.equals("+")||c.equals("-")||c.equals("*")) {
+				try {
+				if (Stack.top()=="/"||Stack.top()=="+"||Stack.top()=="-"||Stack.top()=="*")
+					Q.enqueue(Stack.pop());}
+				catch(Exception e) {
+					throw new InvalidNotationFormatException();
+				}
 				Stack.push(c);}
-			else if (c==")") {
-				while(Stack.top()!="(") {
+			else if (c.equals(")")) {
+				while(!Stack.top().equals("(")) {
 					if(Stack.top()==null)
 						throw new InvalidNotationFormatException();
 					Q.enqueue(Stack.pop());
 					}
+				if (Stack.top().equals("("))
+					Stack.pop();
 			}
 		}
-		while (Stack.top()!=null)
+		while (!Stack.isEmpty())
 			Q.enqueue(Stack.pop());
 		return Q.toString();
 	}
@@ -63,21 +70,20 @@ public class Notation {
 	 */
 	public static String convertPostfixToInfix(String postfix) throws StackOverflowException, InvalidNotationFormatException, StackUnderflowException{
 		Stack=new MyStack<String>();
-		String c;
+		String c="";
 		String infix="";
 		for (int n=0;n<postfix.length();n++) {
 			c="";
 			c+=postfix.charAt(n);
-			if(c==" ")
+			if(c.equals(" "))
 				continue;
 			else if(Character.isDigit(postfix.charAt(n)))
 				Stack.push(c);
-			else if(c=="/"||c=="+"||c=="-"||c=="*") {
-				if (Stack.size()<2)//TODO
+			else if(c.equals("/")||c.equals("+")||c.equals("-")||c.equals("*")) {
+				if (Stack.size()<2) 
 					throw new InvalidNotationFormatException();
-				infix+=Stack.pop();
-				infix+=c;
-				infix+=Stack.pop();
+				infix=c+Stack.pop();
+				infix=Stack.pop()+infix;
 				infix="("+infix+")";
 				Stack.push(infix);}
 			}
@@ -97,34 +103,36 @@ public class Notation {
 	 */
 	public static double evaluatePostfixExpression(String postfix) throws StackOverflowException, InvalidNotationFormatException, NumberFormatException, StackUnderflowException {
 		Stack=new MyStack<String>();
-		String c;
-		double sol;
+		String c="";
+		double sol=0.0;
+		double temp=0.0;
 		for (int n=0;n<postfix.length();n++) {
 			c="";
 			c+=postfix.charAt(n);
-			if(c==" ")
+			if(c.equals(" "))
 				continue;
-			else if(Character.isDigit(postfix.charAt(n))||c=="(")
+			else if(Character.isDigit(postfix.charAt(n))||c.equals("("))
 				Stack.push(c);
-			else if(c=="/"||c=="+"||c=="-"||c=="*") {
-				sol=0.0;
+			else if(c.equals("/")||c.equals("+")||c.equals("-")||c.equals("*")) {
 				if (Stack.size()<2)//TODO
 					throw new InvalidNotationFormatException();
+				sol=0.0;
+				temp=Double.parseDouble(Stack.pop());
 				switch(c) {
 					case "/":
-						sol= Double.parseDouble(Stack.pop())/Double.parseDouble(Stack.pop());
+						sol= Double.parseDouble(Stack.pop())/temp;
 						Stack.push(String.valueOf(sol));
 						break;
 					case "+":
-						sol= Double.parseDouble(Stack.pop())+Double.parseDouble(Stack.pop());
+						sol= Double.parseDouble(Stack.pop())+temp;
 						Stack.push(String.valueOf(sol));
 						break;
 					case "-":
-						sol= Double.parseDouble(Stack.pop())-Double.parseDouble(Stack.pop());
+						sol= Double.parseDouble(Stack.pop())-temp;
 						Stack.push(String.valueOf(sol));
 						break;
 					case "*":
-						sol= Double.parseDouble(Stack.pop())*Double.parseDouble(Stack.pop());
+						sol= Double.parseDouble(Stack.pop())*temp;
 						Stack.push(String.valueOf(sol));
 						break;
 					default:

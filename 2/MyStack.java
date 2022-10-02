@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class MyStack<T> implements StackInterface<T>{
 	Node<T> head;
-	int capacity=10; //maximum number of node 
+	int capacity=15; //maximum number of node 
 	int size=0;		//current number of things in stack
 	
 	/**
@@ -60,7 +60,8 @@ public class MyStack<T> implements StackInterface<T>{
 			s= current.data.toString()+delimiter+s;
 			current=current.next;
 		}
-		s=s.substring(0, s.length() - 1); //remove last character in the string, which should be a delimiter
+		if(s.length()>=2 )
+			s=s.substring(0, s.length() - 1); //remove last character in the string, which should be a delimiter
 		return s;
 	}
 
